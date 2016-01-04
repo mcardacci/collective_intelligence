@@ -114,9 +114,11 @@ def getRecommendations(prefs, person, similarity=sim_pearson):
       if item not in prefs[person] or prefs[person][item]==0:
       	# Similarity * Score
       	totals.setdefault(item,0)
+      	print "THESE ARE THE TOTALS {}".format(totals)
       	totals[item]+=prefs[other][item]*sim
       	# Sum of similarities 
       	simSums.setdefault(item, 0)
+      	print "THESE ARE simsums {}".format(simSums)
       	simSums[item]+=sim
 
   # Create a normalized list
@@ -127,8 +129,19 @@ def getRecommendations(prefs, person, similarity=sim_pearson):
   rankings.reverse()
   return rankings 
 
+# example call print getRecommendations(critics, 'Toby')
 
-print getRecommendations(critics, 'Toby')
+def transformPrefs(prefs):
+  result={}
+  for person in prefs:
+  	for item in prefs[person]:
+  		result.setdefault(item,{})
+
+  		# Flip item and person
+  		result[item][person]=prefs[person][item]
+  return result
+# example call print transformPrefs(critics)
+
 
 
 
