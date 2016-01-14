@@ -1,2 +1,3 @@
-# recommendations_python
-Recommendation algorithms working on a small data set of critic's reviews
+# Programming Collective Intelligence
+Examples from the book with the same name by Toby Segaran
+* Contains some outdated API calls
