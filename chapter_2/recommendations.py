@@ -1,3 +1,9 @@
+# Make python start at a dif working dir.
+# Allows Idle to import modules from wherever you like.
+# import os
+# os.getcwd()
+# os.chdir('c:\\Users\\Marc Cardacci\\Desktop\\projects\\python\\collective_intelligence\\chapter_2\\')
+
 # A dictionary of movie critics and their ratings of a small
 # set of movies 
 critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
@@ -142,11 +148,10 @@ def transformPrefs(prefs):
   return result
 # example call print transformPrefs(critics)
 
-def calculateSimilarItems(prefs, n=10):
-  # Create a dictionary of item showing which other items they 
+def calculateSimilarItems(prefs,n=10):
+  # Create a dictionary of items showing which other items they
   # are most similar to.
-  result = {}
-
+  result={}
   # Invert the preference matrix to be item-centric
   itemPrefs=transformPrefs(prefs)
   c=0
@@ -154,12 +159,97 @@ def calculateSimilarItems(prefs, n=10):
     # Status updates for large datasets
     c+=1
     if c%100==0: print "%d / %d" % (c,len(itemPrefs))
-    # Find the most similar items to this one 
-    scores=topMatches(itemPrefs, item, n=n, similarity=sim_distance)
+    # Find the most similar items to this one
+    scores=topMatches(itemPrefs,item,n=n,similarity=sim_distance)
     result[item]=scores
   return result
+ 
+# Example call: print calculateSimilarItems(critics, n=10)
 
-# example call print calculateSimilarItems(critics, n=10)
+# Outputs the predicted rating for a movie Toby hasn't seen yet.
+def getRecommendedItems(prefs,user,itemMatch):
+  userRatings=prefs[user]
+  scores = {}
+  totalSim={}
+
+  # Loop over items rated by this user
+  for (item,rating) in userRatings.items():
+
+    # Loop over items that are similar o this one
+    for (similarity,item2) in itemMatch[item]:
+
+      # Ignore if this user has already rated this item
+      if item2 in userRatings: continue
+
+      # Weighted sum of rating time similarity
+      scores.setdefault(item2, 0)
+      scores[item2]+=similarity*rating
+
+      # Sum of all the similarities
+      totalSim.setdefault(item2, 0)
+      totalSim[item2]+=similarity
+
+  # Divide each total weighting by total score to get an average
+  rankings=[(score/totalSim[item],item) for item,score in scores.items()]
+
+  # Return the rankings from highest to lowest
+  rankings.sort()
+  rankings.reverse()
+  return rankings
+
+# In order for getRecommendedItems to work, you need to call calculateSimilarItems,
+# Save it to a variable, loop over it, and save it to another variable.
+# Otherwise when the calcSimItems method will think you're giving it another arg
+# Example call:
+# simItems=calculateSimilarItems(critics,n=10)
+# tempStorage={} 
+# for title in simItems:
+#   tempStorage[title]=simItems[title]
+
+# print getRecommendedItems(critics,'Toby',tempStorage)
+
+
+def loadMovieLens(path='/data/movielens'):
+
+  #Get movie titles
+  movies={}
+  for line in open(path+'/u.item'):
+    (id,title)=line.split('|')[0:2]
+    movies[id]=title
+
+  # Load data
+  prefs={}
+  for line in open(path+'u.data'):
+    (user,movieid,rating,ts)=line.spit('\t')
+    prefs.setdefault(user,{})
+    prefs[user][movies[movieid]]=float(rating)
+  return prefs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
