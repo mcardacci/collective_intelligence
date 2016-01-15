@@ -198,7 +198,7 @@ def getRecommendedItems(prefs,user,itemMatch):
   return rankings
 
 # In order for getRecommendedItems to work, you need to call calculateSimilarItems,
-# Save it to a variable, loop over it, and save it to another variable.
+# Save it to a variable, loop over it, and save it to another variable. 
 # Otherwise when the calcSimItems method will think you're giving it another arg
 # Example call:
 # simItems=calculateSimilarItems(critics,n=10)
@@ -208,22 +208,29 @@ def getRecommendedItems(prefs,user,itemMatch):
 
 # print getRecommendedItems(critics,'Toby',tempStorage)
 
-
-def loadMovieLens(path='/data/movielens'):
+# This method reads in data from files located in 'data' folder, downloaded from 'grouplens.org'.
+# 
+def loadMovieLens(path="C:\\Users\\Marc Cardacci\\Desktop\\projects\\python\\collective_intelligence\\data\\"):
 
   #Get movie titles
   movies={}
-  for line in open(path+'/u.item'):
+  for line in open(path+'u.item'):
+    # Note: [0:2] is a slice range inside of the array made from the split
     (id,title)=line.split('|')[0:2]
     movies[id]=title
 
   # Load data
   prefs={}
   for line in open(path+'u.data'):
-    (user,movieid,rating,ts)=line.spit('\t')
+    (user,movieid,rating,ts)=line.split('\t')
     prefs.setdefault(user,{})
     prefs[user][movies[movieid]]=float(rating)
   return prefs
+
+# Example call:
+# prefs=recommendations.loadMovieLens()
+# prefs['87']
+
 
 
 
