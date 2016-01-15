@@ -228,7 +228,7 @@ def loadMovieLens(path="C:\\Users\\Marc Cardacci\\Desktop\\projects\\python\\col
   return prefs
 
 # Example call:
-# prefs=recommendations.loadMovieLens()
+# prefs=loadMovieLens()
 # prefs['87']
 
 
