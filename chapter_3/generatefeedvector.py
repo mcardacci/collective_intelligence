@@ -25,7 +25,6 @@ def getwordcounts(url):
 
     return (d.feed.title, wc)
 
-
 def getwords(html):
     # Remove all the HTML tags
     txt = re.compile(r'<[^>]+>').sub('', html)
