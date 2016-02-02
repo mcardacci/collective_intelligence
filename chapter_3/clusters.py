@@ -14,7 +14,7 @@ def readfile(filename):
 		rownames.append(p[0])
 		# The data for this row is the remainder of the row
 		data.append([float(x) for x in p[1:]])
-	return rownames[0],colnames[0],data[0]
+	return rownames,colnames,data
 # The top row is the list of column names 
 # The leftmost row is now the list of rownames
 # Everything to the right of the leftmost row is now a list of data
@@ -27,7 +27,7 @@ def pearson(v1,v2):
   
   # Sums of the squares
 	sum1Sq=sum([pow(v,2) for v in v1])
-	sum2Sq=sum([pow(v,2) for v in v2])	
+	sum2Sq=sum([pow(v,2) for v in v2])
   
   # Sum of the products
 	pSum=sum([v1[i]*v2[i] for i in range(len(v1))])
