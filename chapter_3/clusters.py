@@ -43,6 +43,7 @@ def pearson(v1,v2):
 
 # We use this class for the following algorithm to measure the distance btw two clusters
 # Then we merge the data btw the two closest clusters and create a new cluster
+
 class bicluster:
 	def __init__(self,vec,left=None,right=None,distance=0.0,id=None):
 		self.left=left
@@ -80,12 +81,13 @@ def hcluster(rows,distance=pearson):
 
 		# Calculate the average of the two clusters
 		mergevec=[
-		(clust[lowestpair[0]].vec[i]+clust[lowestpair[1]].vec[i])/2.0 
+		(clust[lowestpair[0]].vec[i]+clust[lowestpair[1]].vec[i])/2.0  
 		for i in range(len(clust[0].vec))]
 
 		# Create the new cluster
 		newcluster=bicluster(mergevec,left=clust[lowestpair[0]],
-			right=clust[lowestpair[1]],distance=closest,id=currentclustid)
+			right=clust[lowestpair[1]],
+			distance=closest,id=currentclustid)
 		
 		# Cluster ids that werenj't in the original set are negative
 		currentclustid-=1
@@ -111,8 +113,10 @@ def printclust(clust,labels=None,n=0):
 	if clust.left!=None: printclust(clust.left,labels=labels,n=n+1)
 	if clust.right!=None: printclust(clust.right,label=labels, n=n+1)
 
-
-
+def kcluster(rows,distance=pearson,k=4):
+	# Determin the minimum and maximum values for each point
+	ranges=[(min([row[i] for row in rows]),max([row[i] for row in rows])) for i in range(len(rows[0]))]
+	
 
 
 
