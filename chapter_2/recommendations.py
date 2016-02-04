@@ -2,7 +2,7 @@
 # Allows Idle to import modules from wherever you like.
 # import os
 # os.getcwd()
-# os.chdir('c:\\Users\\Marc Cardacci\\Desktop\\projects\\python\\collective_intelligence\\chapter_2\\')
+# os.chdir('c:\\Users\\marcoc\\Desktop\\projects\\python\\coll_intell\\chapter_3\\')
 
 # A dictionary of movie critics and their ratings of a small
 # set of movies 
