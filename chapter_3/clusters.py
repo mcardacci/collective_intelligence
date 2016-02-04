@@ -27,4 +27,4 @@ def pearson(v1,v2):
 
 	# Sum of the squares
 	sum1Sq=sum([pow(v,2) for v in v1])
-	sum2Sq=sum([pow(v,2) for v in v2])
+	sum2Sq=sum([pow(v,2) for v in v2      ])
