@@ -1,4 +1,5 @@
 from math import sqrt
+from PIL import Image, ImageDraw
 
 # Here we read in the file
 def readfile(filename):
@@ -27,9 +28,6 @@ def pearson(v1,v2):
   
   # Sums of the squares
 	sum1Sq=sum([pow(v,2) for v in v1])
-<<<<<<< HEAD
-	sum2Sq=sum([pow(v,2) for v in v2      ])
-=======
 	sum2Sq=sum([pow(v,2) for v in v2])
   
   # Sum of the products
@@ -116,9 +114,71 @@ def printclust(clust,labels=None,n=0):
 	if clust.left!=None: printclust(clust.left,labels=labels,n=n+1)
 	if clust.right!=None: printclust(clust.right,label=labels, n=n+1)
 
-def kcluster(rows,distance=pearson,k=4):
-	# Determin the minimum and maximum values for each point
-	ranges=[(min([row[i] for row in rows]),max([row[i] for row in rows])) for i in range(len(rows[0]))]
+def getheight(clust):
+	# If this is an endpoint the height equals 1
+	if clust.left==None and clust.right==None: return 1
+
+	# Otherwise the height is the sum of the heights of each branch
+	return getheight(clust.left)+getheight(clust.right)
+
+def getdepth(clust):
+	# The distance of an endpoint is 0.0
+	if clust.left==None and clust.right==None: return 0
+
+	# The distance of a branch is the greater of it's two sides
+	# plus it's own distance
+	return max(getdepth(clust.left), getdepth(clust.right))+clust.distance
+
+def drawdendrogram(clust, labels,jpeg='clusters.jpg'):
+	# height and width are fixed
+	h=getheight(clust)*20
+	w=1200
+	depth=getdepth(clust)
+
+	# Width is fixed, so scale distances accordingly
+	scaling=float(w-150)/depth
+
+	# Create a new image with a white background
+	img=Image.new('RGB', (w,h),(255,255,255))
+	draw=ImageDraw.Draw(img)
+
+	draw.line((0,h/2,10,h/2),fill=(255,0,0))
+
+	# Draw the first node
+	drawnode(draw,clust,10,(h/2),scaling,labels)
+	img.save(jpeg,'JPEG')
+
+def drawnode(draw,clust,x,y,scaling,labels):
+	if clust.id<0:
+		h1=getheight(clust.left)*20
+		h2=getheight(clust.right)*20
+		top=y-(h1+h2)/2
+		bottom=y+(h1+h2)/2
+		# Line length
+		ll=clust.distance*scaling
+		# Vertical line from this cluster to children
+		draw.line((x,top+h1/2,x,bottom-h2/2),fill=(255,0,0))
+
+		# Horizontal line to left item
+		draw.line((x,top+h1/2,x+ll,top+h1/2),fill=(255,0,0))
+
+		# Horizontal line to right item
+		draw.line((x,bottom-h2/2,x+ll,bottom-h2/2),fill=(255,0,0))
+
+		# Call the function to draw the left and right nodes
+		drawnode(draw,clust.left,x+ll,top+h1/2,scaling,labels)
+		drawnode(draw,clust.right,x+ll,bottom-h2/2,scaling,labels)
+	else:
+		# If this is an endpoint, draw the item label
+		draw.text((x+5,y-7), labels[clust.id], (0,0,0))
+# Example call:
+# clusters.drawdendrogram(clust,blognames,jpeg='blogclust.jpg')
+
+
+
+# def kcluster(rows,distance=pearson,k=4):
+# 	# Determin the minimum and maximum values for each point
+# 	ranges=[(min([row[i] for row in rows]),max([row[i] for row in rows])) for i in range(len(rows[0]))]
 	
 
 
@@ -160,6 +220,3 @@ def kcluster(rows,distance=pearson,k=4):
 
 
 
-
-
->>>>>>> 691365f6845fdf4d62d52e9e69f9b0a9f62d31d5
